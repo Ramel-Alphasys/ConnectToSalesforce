@@ -1,0 +1,33 @@
+modules:
+  jira:projectSettingsPage:
+    - key: connecttosalesforce-project-settings-page
+      resource: main
+      resolver:
+        function: resolver
+      render: native
+      title: Connect To Salesforce
+  trigger:
+    - key: connecttosalesforce-trigger-app
+      function: triggerHandler
+      events:
+        - avi:jira:updated:issue
+  function:
+    - key: resolver
+      handler: index.handler
+    - key: triggerHandler
+      handler: index.run
+resources:
+  - key: main
+    path: src/frontend/index.jsx
+app:
+  runtime:
+    name: nodejs20.x
+  id: ari:cloud:ecosystem::app/1d460094-29b5-4b6b-8954-31848fda34a0
+permissions:
+  external:
+    fetch:
+      backend:
+        - "*.salesforce.com/services/oauth2/token"
+  scopes:
+    - storage:app
+    - read:jira-work
